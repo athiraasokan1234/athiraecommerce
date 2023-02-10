@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+         {{category.description|truncatewords:155 }}
+    {% else %}
+       welcome to caffee store where you can drink,eat different items...
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+         {{category.name}}-caffee store
+    {% else %}
+       see our drinks-caffee store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+    <div>
+      <div class="row my_row_class">
+          <div class="mx-auto">
+              <p><a href="{% url 'shops:allprodcat' %}">our drink collections</a></p>
+      </div>
+          </div>
+    </div>
+    {% endif %}
+<div class="mx_auto">
+  {% if category %}
+  <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" width="250px;" >
+</div>
+   <br>
+<div>
+      <h1 class="text-center my_title"> {{category.name}}</h1>
+      <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="our products" width="1500px;" height="900">
+</div>
+<br>
+<div>
+  <h1 class="text-center my_title">our drink collections</h1>
+  <p class=" text-justify">Coffee Circus' owners are taking advantage of the coffee house rage that has been sweeping the country. Along with taking advantage of this trend, they are also planning for the future. Coffee Circus is also marketing itself as a full service restaurant to maintain stability, in case the coffee trend begins to fizzle.
+  </p>
+</div>
+{% endif %}
+<div class="container">
+  <div class="row mx_auto">
+    {% for product in products.object_list %}
+      <div class="my_bottom_margin col-9 col-sm-12 col-md-4  xol-lg-4">
+          <div class="card text-center" style="minimum-width:18rem;">
+          <a href="{{product.get_url}}"><img class="card-image-top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+          <div class="card-body">
+             <h4>{{product.name}}</h4>
+              <p>{{product.price}}</p>
+          </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}"> {{pg}} </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
